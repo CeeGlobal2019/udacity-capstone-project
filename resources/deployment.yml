@@ -1,0 +1,35 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: myproject-deployment
+  labels:
+    app: myproject
+spec:
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+        maxUnavailable: 50%
+        maxSurge: 1
+  replicas: 4
+  selector:
+    matchLabels:
+      app: myproject
+  template:
+    metadata:
+      labels:
+        app: myproject
+    spec:
+      containers:
+        - name: myproject
+          imagePullPolicy: Always
+          image: IMAGE
+          ports:
+            - containerPort: 80
+          readinessProbe:
+              httpGet:
+                path: /
+                port: 80
+              periodSeconds: 10
+              timeoutSeconds: 5
+              successThreshold: 1
+              failureThreshold: 10
