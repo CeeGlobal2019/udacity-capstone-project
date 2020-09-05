@@ -6,19 +6,19 @@ pipeline {
         dockerImage = ''
     }
     stages {
-         stage('Lint files') {
+         stage('Linting my app and container') {
               steps {
                   sh 'make lint'
               }
          }
-         stage('Building image') {
+         stage('Building Docker image') {
             steps{
                 script {
                     dockerImage = docker.build registry + ":$BUILD_NUMBER"
                 }
             }
         }
-        stage('Upload Image to Docker hub') {
+        stage('Uploading Docker-Image to Docker hub') {
             steps{
                 script {
                     docker.withRegistry( '', registryCredential ) {
